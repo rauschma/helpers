@@ -23,14 +23,6 @@ export function setLastIndex(matchMode: MatchMode, regExp: RegExp, lastIndex: nu
   return regExp;
 }
 
-// export function execAt(regExp: RegExp, str: string, index: number): RegExpExecArray | null {
-//   if (!regExp.flags.includes('g')) {
-//     throw new Error('regExp must include flag /g: ' + regExp);
-//   }
-//   regExp.lastIndex = index;
-//   return regExp.exec(str);
-// }
-
 export function escapeForRegExp(str: string) {
   return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
 }

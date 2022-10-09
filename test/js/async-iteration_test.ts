@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { arrayFromAsync, arrayToAsyncIterable as toAI, takeAsync } from '../src/js/async-iteration.js';
-import { createSuite } from '../src/js/tests.js';
+import { arrayFromAsync, arrayToAsyncIterable as toAI, takeAsync } from '../../src/js/async-iteration.js';
+import { createSuite } from '../../src/js/tests.js';
 
 createSuite(import.meta.url);
 
