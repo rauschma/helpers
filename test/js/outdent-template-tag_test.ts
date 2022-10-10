@@ -15,8 +15,34 @@ test('Indented line', () => {
   );
 });
 
-test('Multi-line substitution', () => {
+test('Multi-line substitution between two lines (text)', () => {
   const lines = 'line#1\n··line#2'.replaceAll('·', ' ');
+  assert.equal(
+    outdent`
+      BEFORE
+        ${lines}
+      AFTER
+    `.replaceAll(' ', '·'),
+    'BEFORE\n··line#1\n····line#2\nAFTER'
+  );
+});
+
+test('Multi-line substitution between at the end (text)', () => {
+  const lines = 'line#1\n··line#2'.replaceAll('·', ' ');
+  assert.equal(
+    outdent`
+      BEFORE
+      ${lines}
+    `.replaceAll(' ', '·'),
+    'BEFORE\nline#1\n··line#2'
+  );
+});
+
+test('Multi-line substitution between two lines (Array)', () => {
+  const lines = [
+    'line#1',
+    '··line#2'.replaceAll('·', ' '),
+  ];
   assert.equal(
     outdent`
       BEFORE

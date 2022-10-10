@@ -1,29 +1,32 @@
 import { assertTrue } from "../ts/types.js";
-import { splitLinesInclEol } from "./lines.js";
+import { removeTrailingEol, splitLinesExclEol } from "./lines.js";
 
 const RE_LINE_BREAK = /^(?<lineBreak>\r?\n)(?<indent>[ \t]*)/;
 const RE_LINE = /^(?<indent>[ \t]*)(?<content>[^]*)$/;
+const RE_STARTS_WITH_EOL = /^(\r?\n)/;
 
+/**
+ * @returns A string that neither starts nor ends with whitespace.
+ */
 export function outdent(templateStrings: TemplateStringsArray, ...substitutions: any[]) {
-  const lineBreakMatch = RE_LINE_BREAK.exec(templateStrings.raw[0]);
+  const firstTmplStr = templateStrings.raw[0];
+  const lineBreakMatch = RE_LINE_BREAK.exec(firstTmplStr);
   if (!lineBreakMatch || !lineBreakMatch.groups) {
     return String.raw(templateStrings, ...substitutions);
   }
   const indent = lineBreakMatch.groups.indent;
   const leadingLineBreak = lineBreakMatch.groups.lineBreak;
 
-  const builder = new Builder(indent);
-  for (let [index, tmplStr] of templateStrings.entries()) {
-    if (index > 0) {
-      builder.visitSubst(substitutions[index-1]);
-    }
-    if (index === 0) {
-      tmplStr = tmplStr.slice(leadingLineBreak.length);
-    }
-    if (index === (templateStrings.length-1)) {
-      tmplStr = tmplStr.trimEnd();
-    }
-    builder.visitStr(tmplStr);
+  const builder = new Builder(indent, templateStrings.raw.length);
+
+  // templateStrings.length = 1 + substitutions.length
+  // There is always at least one template string
+  builder.visitTmplStr(firstTmplStr.slice(leadingLineBreak.length), 0);
+  for (let [index, subst] of substitutions.entries()) {
+    const before = templateStrings.raw[index];
+    const after = templateStrings.raw[index+1];
+    builder.visitSubst(before, subst, after);
+    builder.visitTmplStr(after, index+1);
   }
   return builder.toString();
 }
@@ -36,26 +39,32 @@ enum LinePos {
 
 class Builder {
   #outdent: string;
+  #tmplStrLength: number;
   #curIndent = '';
   #str = '';
   #linePos = LinePos.LineStart;
 
-  constructor(outdent: string) {
+  constructor(outdent: string, tmplStrLength: number) {
     this.#outdent = outdent;
+    this.#tmplStrLength = tmplStrLength;
   }
   toString() {
     return this.#str;
   }
 
-  visitStr(str: string): void {
+  visitTmplStr(tmplStr: string, index: number): void {
+    if (index === (this.#tmplStrLength-1)) {
+      // Last template string
+      tmplStr = tmplStr.trimEnd();
+    }
     let pos = 0;
     while (true) {
-      const eolIndex = str.indexOf('\n', pos);
+      const eolIndex = tmplStr.indexOf('\n', pos);
       if (eolIndex < 0) {
-        this.#visitFragment(str.slice(pos));
+        this.#visitFragment(tmplStr.slice(pos));
         return;
       }
-      this.#visitFragment(str.slice(pos, eolIndex+1));
+      this.#visitFragment(tmplStr.slice(pos, eolIndex+1));
       this.#linePos = LinePos.LineStart; // fragment ends line
       pos = eolIndex + 1;
     }
@@ -86,20 +95,39 @@ class Builder {
     }
   }
 
-  visitSubst(subst: any) {
-    if (typeof subst === 'string') {
-      if (subst.includes('\n') && this.#linePos === LinePos.AfterIndent) {
-        for (const [index, line] of splitLinesInclEol(subst.trimEnd()).entries()) {
-          if (index > 0) {
-            this.#str += this.#curIndent;  
-          }
-          this.#str += line;
-        }
-        this.#linePos = LinePos.InsideLine;
+  visitSubst(_before: string, subst: any, after: string) {
+    // Each `outdent` tagged template usually ends with a backtick at the
+    // beginning of a (potentially indented) line. That means that even the
+    // “last” line is terminated by an EOL.
+    const followedByEolMatch = RE_STARTS_WITH_EOL.exec(after);
+    const canInsertMultipleLines = (
+      this.#linePos === LinePos.AfterIndent
+      && followedByEolMatch !== null
+    );
+    if (canInsertMultipleLines) {
+      if (Array.isArray(subst)) {
+        this.#appendLines(subst, followedByEolMatch[1]);
+        return;
+      }
+      if (typeof subst === 'string' && subst.includes('\n')) {
+        this.#appendLines(splitLinesExclEol(subst), followedByEolMatch[1]);
         return;
       }
     }
     this.#str += String(subst);
+    this.#linePos = LinePos.InsideLine;
+  }
+
+  #appendLines(lines: Array<unknown>, eol: string) {
+    for (let [index, line] of lines.entries()) {
+      if (index > 0) {
+        this.#str += this.#curIndent;  
+      }
+      this.#str += removeTrailingEol(String(line));
+      if (index < (lines.length-1)) {
+        this.#str += eol;
+      }
+    }
     this.#linePos = LinePos.InsideLine;
   }
 }
