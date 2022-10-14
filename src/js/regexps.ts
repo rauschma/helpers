@@ -23,6 +23,14 @@ export function setLastIndex(matchMode: MatchMode, regExp: RegExp, lastIndex: nu
   return regExp;
 }
 
+/**
+ * The string returned by this function can be passed to `new RegExp()` and
+ * it will match the characters in `str`. It escapes them so that they
+ * don’t have any special meaning.
+ *
+ * All special characters are escaped, because we may want to quote
+ * characters inside parentheses or square brackets.
+ */
 export function escapeForRegExp(str: string) {
-  return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+  return str.replace(/[\\^$.*+?()\[\]{}|=!<>:\-]/g, '\\$&');
 }
