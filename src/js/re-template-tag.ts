@@ -1,3 +1,5 @@
+import { escapeForRegExp } from "./regexps.js";
+
 export function re(templateStrings: TemplateStringsArray, ...substitutions: unknown[]): RegExp {
   // templateStrings.length = 1 + substitutions.length
   // There is always at least one template string
@@ -13,7 +15,7 @@ export function re(templateStrings: TemplateStringsArray, ...substitutions: unkn
         // duplicates (which the RegExp constructor would complain about).
         reStr += Array.from(new Set(subst)).join('');
       } else {
-        reStr += quoteText(subst);
+        reStr += escapeForRegExp(subst);
       }
     } else if (subst instanceof RegExp) {
       reStr += subst.source;
@@ -48,11 +50,4 @@ export function re(templateStrings: TemplateStringsArray, ...substitutions: unkn
  */
 function handleEscapedBackticks(str: string) {
   return str.replace(/\\`/g, '`');
-}
-
-/**
-* All special characters are escaped, because you may want to quote several characters inside parentheses or square brackets.
-*/
-export function quoteText(text: string) {
-  return text.replace(/[\\^$.*+?()[\]{}|=!<>:-]/g, '\\$&');
 }
