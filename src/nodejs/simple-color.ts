@@ -1,3 +1,5 @@
+// The actual API is documented at the end of this file
+
 /**
  * @see https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
  */
@@ -67,6 +69,9 @@ type Ansi = AnsiInst & TmplFunc;
 
 const ansiProto = {} as AnsiProto;
 {
+  // I initially did this via:
+  // Object.entries() -> .map() -> Object.fromEntries() -> Object.defineProperties()
+  // But without a pipe operator, a for-of loop is easier to understand.
   for (const [name, param] of Object.entries(ansiConstants)) {
     Object.defineProperty(
       ansiProto, name,
@@ -95,7 +100,17 @@ function createAnsi(params: Array<number>): Ansi {
 
 /**
  * ```js
- * console.log(`This is ${ansi.Bold.FgRed`bold`} and ${ansi.Underline.FgGreen`underlined`} text`);
+ * console.log(`This is ${ansi.Underline.FgGreen`underlined`} text`);
+ * ```
+ * You can also set up the template tag dynamically:
+ * ```js
+ * let style;
+ * if (success) {
+ *   style = ansi.FgGreen.Bold;
+ * } else {
+ *   style = ansi.FgRed.Bold;
+ * }
+ * console.log(style`We are finished`);
  * ```
  */
 export const ansi = createAnsi([]);
