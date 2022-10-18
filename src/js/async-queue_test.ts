@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { arrayFromAsync } from '../../src/js/async-iteration.js';
-import { AsyncQueue } from '../../src/js/async-queue.js';
-import { createSuite } from '../../src/js/tests.js';
+import { arrayFromAsync } from './async-iteration.js';
+import { AsyncQueue } from './async-queue.js';
+import { createSuite } from './tests.js';
 
 createSuite(import.meta.url);
 

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { re } from '../../src/js/re-template-tag.js';
+import { re } from './re-template-tag.js';
 
 test('Composing regular expressions', () => {
   const RE_YEAR = /([0-9]{4})/;
