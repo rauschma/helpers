@@ -1,5 +1,5 @@
-import { assertTrue } from "../ts/types.js";
-import { removeTrailingEol, splitLinesExclEol } from "./lines.js";
+import { assertTrue } from "../ts/type.js";
+import { trimEol, splitLinesExclEol } from "./line.js";
 
 const RE_LINE_BREAK = /^(?<lineBreak>\r?\n)(?<indent>[ \t]*)/;
 const RE_LINE = /^(?<indent>[ \t]*)(?<content>[^]*)$/;
@@ -123,7 +123,7 @@ class Builder {
       if (index > 0) {
         this.#str += this.#curIndent;  
       }
-      this.#str += removeTrailingEol(String(line));
+      this.#str += trimEol(String(line));
       if (index < (lines.length-1)) {
         this.#str += eol;
       }

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { outdent } from './outdent-template-tag.js';
-import { createSuite } from './tests.js';
+import { createSuite } from './test.js';
 
 createSuite(import.meta.url);
 

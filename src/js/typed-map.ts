@@ -1,4 +1,4 @@
-import { assertTrue, Class } from "../ts/types.js";
+import { assertTrue, Class } from "../ts/type.js";
 
 export class TypedMap {
   #map = new Map<Class<unknown>, any>();

@@ -26,9 +26,9 @@ export function splitLinesExclEol(text: string): Array<string> {
   return text.split(RE_SPLIT_EOL);
 }
 
-const RE_EOL_REMOVE = /\r?\n$/;
-export function removeTrailingEol(line: string) {
-  const match = RE_EOL_REMOVE.exec(line);
-  if (!match) return line;
-  return line.slice(0, match.index);
+const RE_EOL = /\r?\n$/;
+export function trimEol(line: string) {
+  const lineTerminatorIndex = line.search(RE_EOL);
+  if (lineTerminatorIndex < 0) return line;
+  return line.slice(0, lineTerminatorIndex);
 }

@@ -23,6 +23,30 @@ export function setLastIndex(matchMode: MatchMode, regExp: RegExp, lastIndex: nu
   return regExp;
 }
 
+const {raw} = String;
+/**
+ * - Based on {@link https://github.com/tc39/proposal-regex-escaping/blob/main/EscapedChars.md|this list}
+ *   - Ignored: escaping text for `eval()`
+ * - Changes needed for upcoming `/v` flag: {@link https://github.com/tc39/proposal-regexp-v-flag/issues/71}
+ */
+const specialAnywhere = [
+  raw`\^`, raw`\$`,
+  raw`\\`, raw`\.`,
+  raw`\*`, raw`\+`, raw`\?`,
+  raw`\(`, raw`\)`, raw`\[`, raw`\]`, raw`\{`, raw`\}`,
+  raw`\|`,
+  raw`\-`, // inside character classes (square brackets)
+];
+// Only first character of string needs to be escaped in these cases:
+const specialAtStart = [
+  raw`0-9a-fA-F`, // digits: inserting after `\1`, all: inserting after `\u004`
+];
+const re_specialCharacters = new RegExp(
+  raw`[${specialAnywhere.join('')}]|^[${specialAtStart.join('')}]`,
+  'g'
+);
+// Previously used RegExp: /[\\^$.*+?()\[\]{}|\-=!<>:]/g
+
 /**
  * The string returned by this function can be passed to `new RegExp()` and
  * it will match the characters in `str`. It escapes them so that they
@@ -32,5 +56,5 @@ export function setLastIndex(matchMode: MatchMode, regExp: RegExp, lastIndex: nu
  * characters inside parentheses or square brackets.
  */
 export function escapeForRegExp(str: string) {
-  return str.replace(/[\\^$.*+?()\[\]{}|=!<>:\-]/g, '\\$&');
+  return str.replace(re_specialCharacters, '\\$&');
 }

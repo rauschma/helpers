@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { re } from './re-template-tag.js';
 
+// FIXME: test escaped substitutions and escaped dollar signs
+
 test('Composing regular expressions', () => {
   const RE_YEAR = /([0-9]{4})/;
   const RE_MONTH = /([0-9]{2})/;
