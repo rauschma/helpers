@@ -10,14 +10,12 @@ export function cast<T>(theClass: Class<T>, value: any): T {
   return value;
 }
 
-export class AssertionError extends Error {}
-
 /**
- * Useful whenever you don’t want to use Node’s built-in assert.ok().
+ * Useful whenever you don’t want to use Node’s built-in `assert()` or `assert.ok()`.
  */
 export function assertTrue(value: boolean, message=''): asserts value {
   if (!value) {
-    throw new AssertionError(message);
+    throw new TypeError(message);
   }
 }
 
@@ -42,3 +40,16 @@ export type SafeOmit<T, Keys extends keyof T> = Omit<T, Keys>;
  * ```
  */
 export type PropertyValues<Obj> = Obj[keyof Obj];
+
+type TypeofLookupTable = {
+  'undefined': undefined,
+  'boolean': boolean,
+  'number': number,
+  'bigint': bigint,
+  'string': string,
+  'symbol': symbol,
+  'object': null | object,
+  'function': Function,
+};
+export type TypeofString = keyof TypeofLookupTable;
+export type TypeofStringToType<S extends TypeofString> = TypeofLookupTable[S];
