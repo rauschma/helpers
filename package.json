@@ -8,7 +8,7 @@
     "watch": "tsc --watch",
     "clean": "rm -rf dist/*",
     "test": "mocha --enable-source-maps --ui qunit",
-    "testall": "mocha --enable-source-maps --ui qunit \"./dist/test/**/*_test.js\""
+    "testall": "mocha --enable-source-maps --ui qunit \"./dist/**/*_test.js\""
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,10 @@
     "./*": "./dist/src/*"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.0",
-    "@types/node": "^18.8.3",
-    "mocha": "^10.0.0"
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.6",
+    "mocha": "^10.2.0",
+    "@types/mock-fs": "^4.13.4",
+    "mock-fs": "^5.2.0"
   }
 }

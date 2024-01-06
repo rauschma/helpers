@@ -19,8 +19,8 @@
     // Ensure TS code can by compiled by esbuild
     // https://esbuild.github.io/content-types/#isolated-modules
     "isolatedModules": true,
-    // Force use of type imports (clearly marks TS-only imports)
-    // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
-    "importsNotUsedAsValues": "error",
+    // Enforce `type` modifier for TypeScript-only imports
+    // https://www.typescriptlang.org/tsconfig#verbatimModuleSyntax
+    "verbatimModuleSyntax": true,
   }
 }

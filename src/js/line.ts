@@ -32,3 +32,7 @@ export function trimEol(line: string) {
   if (lineTerminatorIndex < 0) return line;
   return line.slice(0, lineTerminatorIndex);
 }
+
+export function detectEol(text: string): string {
+  return text.includes('\r\n') ? '\r\n' : '\n';
+}

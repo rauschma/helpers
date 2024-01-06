@@ -1,6 +1,6 @@
 import { assertNonNullable, assertTrue } from '../ts/type.js';
-import { ArrayQueue } from './lang.js';
-import { createPromiseWithSettlers, PromiseWithSettlers } from './promise.js';
+import { ArrayQueue } from './array-queue.js';
+import { createPromiseWithSettlers, type PromiseWithSettlers } from './promise.js';
 
 /**
  * This class is a queue that works asynchronously:

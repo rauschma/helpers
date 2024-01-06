@@ -1,7 +1,7 @@
-import { assertTrue, Class } from "./type.js";
+import { cast, type Class } from './type.js';
 
 export class TypedMap {
-  #map = new Map<Class<unknown>, any>();
+  #map = new Map<Class<unknown>, unknown>();
   set<T>(key: Class<T>, value: T): this {
     this.#map.set(key, value);
     return this;
@@ -11,11 +11,13 @@ export class TypedMap {
     if (value === undefined) {
       return undefined;
     }
-    return value;
+    return cast(key, value);
   }
-  getForced<T>(key: Class<T>): T {
+  getOrThrow<T>(key: Class<T>): T {
     const value = this.get(key);
-    assertTrue(value !== undefined);
+    if (value === undefined) {
+      throw new TypeError(`No value for key ${key}`);
+    }
     return value;
   }
   keyClassNames() {
