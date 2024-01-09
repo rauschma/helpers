@@ -26,6 +26,11 @@ export function assertNonNullable<T>(value: T): asserts value is NonNullable<T> 
   }
 }
 
+export function nonNullableOrThrow<T>(value: T): NonNullable<T> {
+  assertNonNullable(value);
+  return value;
+}
+
 export type SafeOmit<T, Keys extends keyof T> = Omit<T, Keys>;
 
 /**
