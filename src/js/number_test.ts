@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { createSuite } from './test.js';
+import { createSuite } from '../nodejs/test.js';
 import { randomInteger } from './number.js';
 
 createSuite(import.meta.url);

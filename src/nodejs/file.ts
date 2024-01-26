@@ -24,7 +24,14 @@ export type JsonDir = {
   [key: string]: string | JsonDir;
 };
 
-export function dirToJson(dirPath: string): JsonDir {
+type DirToJsonOptions = {
+  trimEndsOfFiles?: boolean,
+};
+/**
+ * Works well in conjuction with {@link https://github.com/tschaub/mock-fs}
+ */
+export function dirToJson(dirPath: string, options: DirToJsonOptions = {}): JsonDir {
+  const trimEndOfFiles = options.trimEndsOfFiles ?? false;
   const jsonDir: JsonDir = {};
   const dirEntries = fs.readdirSync(dirPath, { withFileTypes: true });
   // Sort the entries to keep things more deterministic
@@ -33,9 +40,13 @@ export function dirToJson(dirPath: string): JsonDir {
     const fileName = dirEntry.name;
     const pathName = path.join(dirPath, fileName);
     if (dirEntry.isDirectory()) {
-      jsonDir[fileName] = dirToJson(pathName);
+      jsonDir[fileName] = dirToJson(pathName, options);
     } else if (dirEntry.isFile()) {
-      jsonDir[fileName] = fs.readFileSync(pathName, 'utf-8');
+      let content = fs.readFileSync(pathName, 'utf-8');
+      if (trimEndOfFiles) {
+        content = content.trimEnd();
+      }
+      jsonDir[fileName] = content;
     }
   }
   return jsonDir;

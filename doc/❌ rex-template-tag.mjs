@@ -41,6 +41,8 @@ function rex(templateStrings, ...substitutions) {
 
 //===== Examples =====
 
+// ❌ Test spaces inside character classes. Work-around: \x20
+
 const { raw } = String;
 
 assert.deepEqual(

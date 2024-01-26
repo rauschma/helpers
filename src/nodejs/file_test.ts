@@ -9,13 +9,23 @@ test('dirToJson', () => {
   mock({
     '/tmp': {
       'dir': {
-        'file1.txt': 'content1',
+        'file1.txt': 'content1\n',
       },
-      'file2.txt': 'content2',
+      'file2.txt': 'content2\n',
     },
   });
+
   assert.deepEqual(
     dirToJson('/tmp'),
+    {
+      dir: {
+        'file1.txt': 'content1\n'
+      },
+      'file2.txt': 'content2\n',
+    }
+  );
+  assert.deepEqual(
+    dirToJson('/tmp', {trimEndsOfFiles: true}),
     {
       dir: {
         'file1.txt': 'content1'

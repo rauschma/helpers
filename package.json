@@ -3,13 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "author": "Axel Rauschmayer",
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "clean": "rm -rf dist/*",
-    "test": "mocha --enable-source-maps --ui qunit",
-    "testall": "mocha --enable-source-maps --ui qunit \"./dist/**/*_test.js\""
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rauschma/helpers.git"
@@ -17,6 +10,13 @@
   "license": "MIT",
   "exports": {
     "./*": "./dist/src/*"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist/*",
+    "test": "mocha --enable-source-maps --ui qunit",
+    "testall": "mocha --enable-source-maps --ui qunit \"./dist/**/*_test.js\""
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
