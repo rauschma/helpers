@@ -19,35 +19,3 @@ export function clearDirectorySync(dir: string) {
     }
   }
 }
-
-export type JsonDir = {
-  [key: string]: string | JsonDir;
-};
-
-type DirToJsonOptions = {
-  trimEndsOfFiles?: boolean,
-};
-/**
- * Works well in conjuction with {@link https://github.com/tschaub/mock-fs}
- */
-export function dirToJson(dirPath: string, options: DirToJsonOptions = {}): JsonDir {
-  const trimEndOfFiles = options.trimEndsOfFiles ?? false;
-  const jsonDir: JsonDir = {};
-  const dirEntries = fs.readdirSync(dirPath, { withFileTypes: true });
-  // Sort the entries to keep things more deterministic
-  dirEntries.sort((a, b) => a.name.localeCompare(b.name, 'en'));
-  for (const dirEntry of dirEntries) {
-    const fileName = dirEntry.name;
-    const pathName = path.join(dirPath, fileName);
-    if (dirEntry.isDirectory()) {
-      jsonDir[fileName] = dirToJson(pathName, options);
-    } else if (dirEntry.isFile()) {
-      let content = fs.readFileSync(pathName, 'utf-8');
-      if (trimEndOfFiles) {
-        content = content.trimEnd();
-      }
-      jsonDir[fileName] = content;
-    }
-  }
-  return jsonDir;
-}

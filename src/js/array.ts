@@ -22,7 +22,7 @@ export function arrayToChunks<T>(arr: Array<T>, chunkLen: number): Array<Array<T
   return result;
 }
 
-export function arrayIsStrictlyEqual<T>(arr1: Array<T>, arr2: Array<T>): boolean {
+export function arrayIsStrictlyEqual<T>(arr1: readonly T[], arr2: readonly T[]): boolean {
   if (arr1.length !== arr2.length) return false;
   for (const [index, elem1] of arr1.entries()) {
     if (elem1 !== arr2[index]) {

@@ -21,8 +21,8 @@
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.10.6",
+    "memfs": "^4.6.0",
     "mocha": "^10.2.0",
-    "@types/mock-fs": "^4.13.4",
-    "mock-fs": "^5.2.0"
+    "quibble": "^0.9.1"
   }
 }
