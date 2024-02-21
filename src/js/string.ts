@@ -27,3 +27,8 @@ export function removePrefixMaybe(str: string, prefix: string) {
     return str;
   }
 }
+
+const RE_EMTPY_LINE = /^[\t \r\n]*$/u;
+export function isEmptyLine(str: string): boolean {
+  return RE_EMTPY_LINE.test(str);
+}

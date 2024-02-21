@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import { createSuite } from './test.js';
+import { jsonToCleanDir, dirToJson } from './dir-json.js';
 
 // Only dynamically imported modules use the patched `node:fs`!
-import './install-mem-node-fs.js';
-const { dirToJson, jsonToCleanDir } = await import('./dir-json.js');
+import {mfs} from './install-mem-node-fs.js';
 
 createSuite(import.meta.url);
 
 test('dirToJson', () => {
-  jsonToCleanDir({
+  jsonToCleanDir(mfs, {
     '/tmp/test/': {
       'dir': {
         'file1.txt': 'content1\n',
@@ -18,7 +18,7 @@ test('dirToJson', () => {
   });
 
   assert.deepEqual(
-    dirToJson('/tmp/test/'),
+    dirToJson(mfs, '/tmp/test/'),
     {
       dir: {
         'file1.txt': 'content1\n'
@@ -27,7 +27,7 @@ test('dirToJson', () => {
     }
   );
   assert.deepEqual(
-    dirToJson('/tmp/test/', {trimEndsOfFiles: true}),
+    dirToJson(mfs, '/tmp/test/', {trimEndsOfFiles: true}),
     {
       dir: {
         'file1.txt': 'content1'

@@ -66,11 +66,18 @@ type TypeofLookupTable = {
 export type TypeofString = keyof TypeofLookupTable;
 export type TypeofStringToType<S extends TypeofString> = TypeofLookupTable[S];
 
-export function isArrayOf<T extends TypeofString>(typeofString: T, value: unknown): value is Array<TypeofStringToType<T>> {
+export function isArrayOfPrimitives<T extends TypeofString>(typeofString: T, value: unknown): value is Array<TypeofStringToType<T>> {
   if (!Array.isArray(value)) {
     return false;
   }
   return value.every(x => typeof x === typeofString);
+}
+
+export function isArrayOfInstances<T>(instanceClass: PotentiallyAbstractClass<T>, value: unknown): value is Array<T> {
+  if (!Array.isArray(value)) {
+    return false;
+  }
+  return value.every(x => isInstanceOf(x, instanceClass));
 }
 
 //#################### Miscellaneous ####################
