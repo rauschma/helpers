@@ -10,7 +10,9 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "strict": true,
+    "noImplicitReturns": true,
     "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
     //
     "sourceMap": true,
     "declaration": true,

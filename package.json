@@ -3,20 +3,22 @@
   "version": "1.0.0",
   "type": "module",
   "author": "Axel Rauschmayer",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rauschma/helpers.git"
-  },
+  "repository": "github:rauschma/helpers",
   "license": "MIT",
   "exports": {
     "./*": "./dist/src/*"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run clean && tsc",
     "watch": "tsc --watch",
-    "clean": "rm -rf dist/*",
+    "clean": "shx rm -rf ./dist/*",
+    "\n========== Testing ==========": "",
     "test": "mocha --enable-source-maps --ui qunit",
-    "testall": "mocha --enable-source-maps --ui qunit \"./dist/**/*_test.js\""
+    "testall": "mocha --enable-source-maps --ui qunit \"./dist/**/*_test.js\"",
+    "\n========== Publishing ==========": "",
+    "dry-run": "npm publish --dry-run",
+    "prepublishOnly": "npm run build",
+    "pack": "npm pack && tar --list --file rauschma-helpers-*.tgz"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
