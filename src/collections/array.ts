@@ -1,4 +1,4 @@
-import { randomInteger } from './number.js';
+import { randomInteger } from '../js/number.js';
 
 /**
  * @see https://en.wikipedia.org/wiki/Fisher–Yates_shuffle#The_modern_algorithm
@@ -22,12 +22,7 @@ export function arrayToChunks<T>(arr: Array<T>, chunkLen: number): Array<Array<T
   return result;
 }
 
-export function arrayIsStrictlyEqual<T>(arr1: readonly T[], arr2: readonly T[]): boolean {
-  if (arr1.length !== arr2.length) return false;
-  for (const [index, elem1] of arr1.entries()) {
-    if (elem1 !== arr2[index]) {
-      return false;
-    }
-  }
-  return true;
+export function isArrayStrictlyEqual<T>(arr1: readonly T[], arr2: readonly T[]) {
+  return arr1.length === arr2.length
+    && arr1.every((elem, i) => elem === arr2[i]);
 }

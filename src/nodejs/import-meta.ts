@@ -1,5 +1,8 @@
 import * as url from 'node:url';
 
+/**
+ * Caveat: Does not work for symlinked "bin" scripts.
+ */
 export function isEntryModule(importMeta: ImportMeta): boolean {
   // url.fileURLToPath() throws if the protocol isn’t `file:`
   if (importMeta.url.startsWith('file:')) {

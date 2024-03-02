@@ -47,30 +47,31 @@ export function jsonToDir(mfs: IFs, dirJson: DirJson): void {
   function createDirRec(parentAbsPath: string, childrenJson: string | DirJson) {
     if (typeof childrenJson === 'string') {
       // File
-      ensureParentDirectory(mfs, parentAbsPath);
+      ensureParentDirectoryMem(mfs, parentAbsPath);
       mfs.writeFileSync(parentAbsPath, childrenJson, {encoding: 'utf-8'});
     } else {
       // Directory
-    }
-    for (const [childRelPath, childJson] of Object.entries(childrenJson)) {
-      if (path.isAbsolute(childRelPath)) {
-        throw new Error('Child directories must be relative: ' + childRelPath);
-      }
-      const childAbsPath = path.join(parentAbsPath, childRelPath);
-      if (typeof childJson === 'string') {
-        // File
-        ensureParentDirectory(mfs, childAbsPath);
-        mfs.writeFileSync(childAbsPath, childJson, {encoding: 'utf-8'});
-      } else {
-        // Directory
-        mfs.mkdirSync(childAbsPath, {recursive: true});
-        createDirRec(childAbsPath, childJson);
+      mfs.mkdirSync(parentAbsPath, {recursive: true})
+      for (const [childRelPath, childJson] of Object.entries(childrenJson)) {
+        if (path.isAbsolute(childRelPath)) {
+          throw new Error('Child directories must be relative: ' + childRelPath);
+        }
+        const childAbsPath = path.join(parentAbsPath, childRelPath);
+        if (typeof childJson === 'string') {
+          // File
+          ensureParentDirectoryMem(mfs, childAbsPath);
+          mfs.writeFileSync(childAbsPath, childJson, {encoding: 'utf-8'});
+        } else {
+          // Directory
+          mfs.mkdirSync(childAbsPath, {recursive: true});
+          createDirRec(childAbsPath, childJson);
+        }
       }
     }
   }
 }
 
-export function ensureParentDirectory(mfs: IFs, filePath: string) {
+export function ensureParentDirectoryMem(mfs: IFs, filePath: string) {
   const parentDir = path.dirname(filePath);
   if (!mfs.existsSync(parentDir)) {
     mfs.mkdirSync(parentDir, { recursive: true });

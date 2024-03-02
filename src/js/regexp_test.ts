@@ -3,12 +3,12 @@ import { escapeForRegExp } from './regexp.js';
 
 test('escapeForRegExp', () => {
   const {raw} = String;
-  // Leading digits vs. other special characters
+  // Decimal digits only have to be escaped at the beginning
   assert.equal(
     escapeForRegExp(raw`3 * 3`),
     raw`\3 \* 3`
   );
-  // Leading digits vs. other special characters
+  // hexadecimal digits only have to be escaped at the beginning
   assert.equal(
     escapeForRegExp('A + A'),
     raw`\A \+ A`

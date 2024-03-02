@@ -31,7 +31,8 @@ const {raw} = String;
  */
 const specialAnywhere = [
   raw`\^`, raw`\$`,
-  raw`\\`, raw`\.`,
+  raw`\\`,
+  raw`\.`,
   raw`\*`, raw`\+`, raw`\?`,
   raw`\(`, raw`\)`, raw`\[`, raw`\]`, raw`\{`, raw`\}`,
   raw`\|`,
@@ -39,7 +40,9 @@ const specialAnywhere = [
 ];
 // Only first character of string needs to be escaped in these cases:
 const specialAtStart = [
-  raw`0-9a-fA-F`, // digits: inserting after `\1`, all: inserting after `\u004`
+  // - Decimal digits: inserting after (e.g.) `\1`
+  // - All (hex digits): inserting after (e.g.) `\u004`
+  raw`0-9a-fA-F`,
 ];
 const re_specialCharacters = new RegExp(
   raw`[${specialAnywhere.join('')}]|^[${specialAtStart.join('')}]`,
