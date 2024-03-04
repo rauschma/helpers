@@ -102,3 +102,14 @@ export type SafeOmit<T, Keys extends keyof T> = Omit<T, Keys>;
  * ```
  */
 export type PropertyValues<Obj> = Obj[keyof Obj];
+
+//========== PublicDataProperties ==========
+
+/**
+ * @see https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types
+ */
+export type PublicDataProperties<T> = Pick<T, PublicDataPropertyKeys<T>>;
+
+export type PublicDataPropertyKeys<TObj> = {
+  [K in keyof TObj]: TObj[K] extends Function ? never : K;
+}[keyof TObj];

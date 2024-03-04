@@ -1,5 +1,5 @@
 import { assertNonNullable, assertTrue } from '../ts/type.js';
-import { ArrayQueue } from '../collections/array-queue.js';
+import { ArrayQueue } from '../collection/array-queue.js';
 import { createPromiseWithSettlers, type PromiseWithSettlers } from './promise.js';
 
 /**
