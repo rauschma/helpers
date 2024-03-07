@@ -5,9 +5,15 @@ export type SearchAndReplace = {
   search: RegExp,
   replace: string,
 };
-export function createSequentialRegExpEscaper(searchAndReplace: Array<SearchAndReplace>): (str: string) => string {
+export function createSequentialRegExpEscaper(searchAndReplaceArr: Array<SearchAndReplace>): (str: string) => string {
+  for (const sar of searchAndReplaceArr) {
+    if (!sar.search.global) {
+      // Also enforced by .replaceAll(), but we want to fail early
+      throw new Error('RegExp must have flag /g: ' + sar.search);
+    }
+  }
   return (str): string => {
-    for (const { search, replace } of searchAndReplace) {
+    for (const { search, replace } of searchAndReplaceArr) {
       str = str.replaceAll(search, replace);
     }
     return str;
