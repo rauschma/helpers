@@ -1,12 +1,13 @@
 import { escapeForRegExp } from "@rauschma/helpers/js/regexp.js";
 import { assertTrue } from "@rauschma/helpers/ts/type.js";
 
-export function createSequentialEscaper(searchAndReplace: Array<[string, string]>): (str: string) => string {
-  const searchAndReplaceRegExps = searchAndReplace.map(
-    ([search, replace]) => ({ search: new RegExp(search, 'gu'), replace })
-  );
+export type SearchAndReplace = {
+  search: RegExp,
+  replace: string,
+};
+export function createSequentialRegExpEscaper(searchAndReplace: Array<SearchAndReplace>): (str: string) => string {
   return (str): string => {
-    for (const { search, replace } of searchAndReplaceRegExps) {
+    for (const { search, replace } of searchAndReplace) {
       str = str.replaceAll(search, replace);
     }
     return str;
@@ -45,7 +46,7 @@ const GROUP_PREFIX = '$$$';
  *   `$<groupName>`. Since we use a function as the second .replace()
  *   argument, we’d have to implement this functionality ourselves.
  */
-export function createRegExpEscaper(searchAndReplacePairs: Array<[string, string]>): (str: string) => string {
+export function createSimultaneousRegExpEscaper(searchAndReplacePairs: Array<[string, string]>, flags='gu'): (str: string) => string {
   // Considerations:
   // - An object literal as a parameter would be nicer, syntactically.
   //   Alas, it wouldn’t preserve the order of the listed entries if some
@@ -61,7 +62,7 @@ export function createRegExpEscaper(searchAndReplacePairs: Array<[string, string
       )
       .join('|')
     ,
-    'gu'
+    flags
   );
   const replacements = new Map(
     searchAndReplacePairs.map(

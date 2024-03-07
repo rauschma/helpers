@@ -1,10 +1,10 @@
 import { createSuite } from '@rauschma/helpers/nodejs/test.js';
 import * as assert from 'node:assert/strict';
-import { createPlainTextEscaper, createSequentialEscaper } from './escaper.js';
+import { createPlainTextEscaper, createSequentialRegExpEscaper } from './escaper.js';
 
 createSuite(import.meta.url);
 
-test('createEscaper for HTML', () => {
+test('createPlainTextEscaper: HTML', () => {
   const escape = createPlainTextEscaper([
     ['&', '&amp;'],
     ['>', '&gt;'],
@@ -19,7 +19,7 @@ test('createEscaper for HTML', () => {
   );
 });
 
-test('createEscaper for backslashes and braces', () => {
+test('createPlainTextEscaper: backslashes and braces', () => {
   const escape = createPlainTextEscaper([
     [`\\`, String.raw`\\`],
     [`{`, String.raw`\{`],
@@ -31,10 +31,10 @@ test('createEscaper for backslashes and braces', () => {
   );
 });
 
-test('createEscaper for bracketed text', () => {
-  const escape = createSequentialEscaper([
-    ["⎡([^⎡⎤]*?)⎤", ""],
-    ["«(?<inside>[^«»]*?)»", "“$<inside>”"],
+test('createSequentialRegExpEscaper: bracketed text', () => {
+  const escape = createSequentialRegExpEscaper([
+    {search: /⎡([^⎡⎤]*?)⎤/gu, replace: ''},
+    {search: /«(?<inside>[^«»]*?)»/gu, replace: '“$<inside>”'},
   ]);
   assert.equal(
     escape('I say «hello»⎡ and goodbye⎤!'),
