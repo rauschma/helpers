@@ -1,4 +1,4 @@
-import { createSuite } from '@rauschma/helpers/nodejs/test.js';
+import { createSuite } from '@rauschma/helpers/js/mocha.js';
 import * as assert from 'node:assert/strict';
 import { createPlainTextEscaper, createSequentialRegExpEscaper } from './escaper.js';
 

@@ -1,11 +1,15 @@
+const RE_SPLIT_EOL_INCL = /(?<=\r?\n)/;
+export function splitLinesInclEol(text: string): Array<string> {
+  return text.split(RE_SPLIT_EOL_INCL);
+}
+
 /**
- * Once Safari supports lookbehind assertions, we can use:
- * ```js
- * const lines = text.split(/(?<=\r?\n)/);
- * ```
+ * This version of `splitLinesInclEol()` does not use lookbehind assertions
+ * in regular expressions (which e.g. Safari hadn’t supported for a long
+ * time).
  * @see https://caniuse.com/js-regexp-lookbehind
  */
- export function splitLinesInclEol(text: string): Array<string> {
+export function splitLinesInclEolCompat(text: string): Array<string> {
   const result: Array<string> = [];
   let lastIndex = 0;
   while (lastIndex < text.length) {
@@ -21,9 +25,9 @@
   return result;
 }
 
-const RE_SPLIT_EOL = /\r?\n/;
+const RE_SPLIT_EOL_EXCL = /\r?\n/;
 export function splitLinesExclEol(text: string): Array<string> {
-  return text.split(RE_SPLIT_EOL);
+  return text.split(RE_SPLIT_EOL_EXCL);
 }
 
 const RE_EOL = /\r?\n$/;
@@ -35,4 +39,37 @@ export function trimEol(line: string) {
 
 export function detectEol(text: string): string {
   return text.includes('\r\n') ? '\r\n' : '\n';
+}
+
+/**
+ * Chunks to lines via async iterable
+ * 
+ * Can be used for
+ * - native Node.js streams
+ * - web streams (Node’s or making them iterable via a helper)
+ *   - for web streams, you can also use `ChunksToLinesTransformer`
+ * 
+ * @param chunkIterable An asynchronous or synchronous iterable
+ * over “chunks” (arbitrary strings)
+ * @returns An asynchronous iterable over “lines”
+ * (strings with at most one newline that always appears at the end)
+ */
+export async function* chunksToLinesAsync(chunkIterable: AsyncIterable<string> | Iterable<string>): AsyncIterable<string> {
+  let previous = '';
+  for await (const chunk of chunkIterable) {
+    let startSearch = previous.length;
+    previous += chunk;
+    while (true) {
+      const eolIndex = previous.indexOf('\n', startSearch);
+      if (eolIndex < 0) break;
+      // line includes the EOL
+      const line = previous.slice(0, eolIndex + 1);
+      yield line;
+      previous = previous.slice(eolIndex + 1);
+      startSearch = 0;
+    }
+  }
+  if (previous.length > 0) {
+    yield previous;
+  }
 }

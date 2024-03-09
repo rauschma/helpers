@@ -1,6 +1,6 @@
+import { createSuite } from '@rauschma/helpers/js/mocha.js';
 import assert from 'node:assert/strict';
-import { arrayFromAsync, arrayToAsyncIterable as toAI, takeAsync } from './async-iteration.js';
-import { createSuite } from '../nodejs/test.js';
+import { arrayFromAsync, takeAsync, arrayToAsyncIterable as toAI } from './async-iteration.js';
 
 createSuite(import.meta.url);
 

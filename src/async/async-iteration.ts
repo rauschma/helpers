@@ -27,6 +27,9 @@
   }
 }
 
+/**
+ * @see https://github.com/tc39/proposal-array-from-async
+ */
 export async function arrayFromAsync<T>(asyncIterable: AsyncIterable<T>): Promise<Array<T>> {
   const result = new Array<T>();
   for await (const elem of asyncIterable) {

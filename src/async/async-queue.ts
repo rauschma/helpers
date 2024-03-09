@@ -1,6 +1,6 @@
-import { assertNonNullable, assertTrue } from '../ts/type.js';
 import { ArrayQueue } from '../collection/array-queue.js';
-import { createPromiseWithSettlers, type PromiseWithSettlers } from './promise.js';
+import { assertNonNullable, assertTrue } from '../ts/type.js';
+import { promiseWithResolvers, type PromiseWithResolvers } from './promise.js';
 
 /**
  * This class is a queue that works asynchronously:
@@ -18,7 +18,7 @@ export class AsyncQueue<T> {
    * used to notify the dequeuer when a value is available. In other words:
    * If this field is non-null, there are no enqeued values.
    */
-  #pendingValue: null | PromiseWithSettlers<IteratorResult<T>> = null;
+  #pendingValue: null | PromiseWithResolvers<IteratorResult<T>> = null;
   #closed = false;
 
   [Symbol.asyncIterator]() {
@@ -65,7 +65,7 @@ export class AsyncQueue<T> {
       return Promise.resolve({done: true, value: undefined});
     }
     // Wait for new enqueued values or closing
-    const promiseWithSettlers = createPromiseWithSettlers<IteratorResult<T>>();
+    const promiseWithSettlers = promiseWithResolvers<IteratorResult<T>>();
     this.#pendingValue = promiseWithSettlers;
     return promiseWithSettlers.promise;
   }

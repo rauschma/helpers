@@ -1,6 +1,6 @@
 {
   "name": "@rauschma/helpers",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "author": "Axel Rauschmayer",
   "repository": "github:rauschma/helpers",
@@ -8,6 +8,30 @@
   "exports": {
     "./*": "./dist/src/*"
   },
+  "// files": [
+    "We can jump to TS source code, thanks to declarationMap:true in tsconfig.json",
+    "Example:",
+    "dist/src/event.js",
+    "dist/src/event.js.map",
+    "dist/src/event.d.ts",
+    "dist/src/event.d.ts.map",
+    "src/event.ts"
+  ],
+  "files": [
+    "package.json",
+    "README.md",
+    "LICENSE",
+    "dist/**/*.js",
+    "dist/**/*.js.map",
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map",
+    "src/**/*.ts",
+    "!dist/**/*_test.js",
+    "!dist/**/*_test.js.map",
+    "!dist/**/*_test.d.ts",
+    "!dist/**/*_test.d.ts.map",
+    "!src/**/*_test.ts"
+  ],
   "scripts": {
     "build": "npm run clean && tsc",
     "watch": "tsc --watch",
@@ -20,14 +44,13 @@
     "prepublishOnly": "npm run build",
     "pack": "npm pack && tar --list --file rauschma-helpers-*.tgz"
   },
-  "dependencies": {
-    "memfs": "^4.6.0",
-    "quibble": "^0.9.1"
-  },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.10.6",
     "mocha": "^10.2.0",
     "shx": "^0.3.4"
+  },
+  "// devDependencies": {
+    "@types/node": "For unit tests (node:assert)"
   }
 }
