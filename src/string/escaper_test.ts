@@ -1,5 +1,5 @@
-import { createSuite } from '@rauschma/helpers/js/mocha.js';
 import * as assert from 'node:assert/strict';
+import { createSuite } from '../testing/mocha.js';
 import { createPlainTextEscaper, createSequentialRegExpEscaper } from './escaper.js';
 
 createSuite(import.meta.url);

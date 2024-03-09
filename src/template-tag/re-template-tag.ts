@@ -1,4 +1,4 @@
-import { escapeForRegExp } from '../js/regexp.js';
+import { escapeForRegExp } from '../lang/regexp.js';
 
 export function re(templateStrings: TemplateStringsArray, ...substitutions: unknown[]): RegExp {
   // templateStrings.length = 1 + substitutions.length

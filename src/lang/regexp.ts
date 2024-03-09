@@ -1,3 +1,5 @@
+const {raw} = String;
+
 export enum MatchMode {
   AtLastIndex = 'AtLastIndex',
   AtLastIndexOrLater = 'AtLastIndexOrLater',
@@ -23,7 +25,6 @@ export function setLastIndex(matchMode: MatchMode, regExp: RegExp, lastIndex: nu
   return regExp;
 }
 
-const {raw} = String;
 /**
  * - Based on {@link https://github.com/tc39/proposal-regex-escaping/blob/main/EscapedChars.md|this list}
  *   - Ignored: escaping text for `eval()`

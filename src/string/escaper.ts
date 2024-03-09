@@ -1,5 +1,5 @@
-import { escapeForRegExp } from "@rauschma/helpers/js/regexp.js";
-import { assertTrue } from "@rauschma/helpers/ts/type.js";
+import { escapeForRegExp } from '../lang/regexp.js';
+import { assertTrue } from '../typescript/type.js';
 
 export type SearchAndReplace = {
   search: RegExp,

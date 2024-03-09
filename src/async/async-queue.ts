@@ -1,5 +1,5 @@
 import { ArrayQueue } from '../collection/array-queue.js';
-import { assertNonNullable, assertTrue } from '../ts/type.js';
+import { assertNonNullable, assertTrue } from '../typescript/type.js';
 import { promiseWithResolvers, type PromiseWithResolvers } from './promise.js';
 
 /**

@@ -1,5 +1,5 @@
-import { createSuite } from '@rauschma/helpers/js/mocha.js';
 import assert from 'node:assert/strict';
+import { createSuite } from '../testing/mocha.js';
 import { arrayToChunks, shuffleArray } from './array.js';
 
 createSuite(import.meta.url);

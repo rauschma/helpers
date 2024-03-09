@@ -1,4 +1,4 @@
-import { randomInteger } from '../js/number.js';
+import { randomInteger } from '../lang/number.js';
 
 /**
  * @see https://en.wikipedia.org/wiki/Fisher–Yates_shuffle#The_modern_algorithm

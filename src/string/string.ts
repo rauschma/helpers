@@ -1,4 +1,4 @@
-import { assertTrue } from '../ts/type.js';
+import { assertTrue } from '../typescript/type.js';
 
 export function insertVariables(variables: Map<string, string>, pattern: string) {
   return pattern.replace(

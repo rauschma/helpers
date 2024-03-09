@@ -1,5 +1,5 @@
-import { assertTrue } from '../ts/type.js';
-import { trimEol, splitLinesExclEol } from '../js/line.js';
+import { assertTrue } from '../typescript/type.js';
+import { trimEol, splitLinesExclEol } from '../string/line.js';
 
 const RE_LINE_BREAK = /^(?<lineBreak>\r?\n)(?<indent>[ \t]*)/;
 const RE_LINE = /^(?<indent>[ \t]*)(?<content>[^]*)$/;
