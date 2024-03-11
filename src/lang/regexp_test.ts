@@ -1,5 +1,5 @@
+import { escapeForRegExp } from '@rauschma/helpers/lang/regexp.js';
 import assert from 'node:assert/strict';
-import { escapeForRegExp } from './regexp.js';
 
 test('escapeForRegExp', () => {
   const {raw} = String;

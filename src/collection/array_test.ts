@@ -1,6 +1,6 @@
+import { arrayToChunks, shuffleArray } from '@rauschma/helpers/collection/array.js';
+import { createSuite } from '@rauschma/helpers/testing/mocha.js';
 import assert from 'node:assert/strict';
-import { createSuite } from '../testing/mocha.js';
-import { arrayToChunks, shuffleArray } from './array.js';
 
 createSuite(import.meta.url);
 

@@ -1,6 +1,6 @@
+import { arrayFromAsync } from '@rauschma/helpers/async/async-iteration.js';
+import { chunksToLinesAsync, splitLinesExclEol, splitLinesInclEol, trimEol } from '@rauschma/helpers/string/line.js';
 import assert from 'node:assert/strict';
-import { arrayFromAsync } from '../async/async-iteration.js';
-import { chunksToLinesAsync, splitLinesExclEol, splitLinesInclEol, trimEol } from './line.js';
 
 test('splitLinesInclEol', () => {
   assert.deepEqual(

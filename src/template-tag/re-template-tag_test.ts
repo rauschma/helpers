@@ -1,5 +1,5 @@
+import { re } from '@rauschma/helpers/template-tag/re-template-tag.js';
 import assert from 'node:assert/strict';
-import { re } from './re-template-tag.js';
 
 // FIXME: test escaped substitutions and escaped dollar signs
 

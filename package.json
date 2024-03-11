@@ -42,7 +42,7 @@
     "\n========== Publishing ==========": "",
     "dry-run": "npm publish --dry-run",
     "prepublishOnly": "npm run build",
-    "pack": "npm pack && tar --list --file rauschma-helpers-*.tgz"
+    "pack": "rm -f rauschma-helpers-*.tgz && npm pack && tar --list --file rauschma-helpers-*.tgz | sort"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",

@@ -1,6 +1,6 @@
+import { randomInteger } from '@rauschma/helpers/lang/number.js';
+import { createSuite } from '@rauschma/helpers/testing/mocha.js';
 import assert from 'node:assert/strict';
-import { createSuite } from '../testing/mocha.js';
-import { randomInteger } from './number.js';
 
 createSuite(import.meta.url);
 

@@ -1,5 +1,5 @@
+import { insertVariables } from '@rauschma/helpers/string/string.js';
 import assert from 'node:assert/strict';
-import { insertVariables } from './string.js';
 
 test('Composing regular expressions', () => {
   const vars = new Map([

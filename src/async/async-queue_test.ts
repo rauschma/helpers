@@ -1,7 +1,7 @@
+import { arrayFromAsync } from '@rauschma/helpers/async/async-iteration.js';
+import { AsyncQueue } from '@rauschma/helpers/async/async-queue.js';
+import { createSuite } from '@rauschma/helpers/testing/mocha.js';
 import assert from 'node:assert/strict';
-import { createSuite } from '../testing/mocha.js';
-import { arrayFromAsync } from './async-iteration.js';
-import { AsyncQueue } from './async-queue.js';
 
 createSuite(import.meta.url);
 

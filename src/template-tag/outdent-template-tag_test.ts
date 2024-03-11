@@ -1,6 +1,6 @@
+import { outdent } from '@rauschma/helpers/template-tag/outdent-template-tag.js';
+import { createSuite } from '@rauschma/helpers/testing/mocha.js';
 import assert from 'node:assert/strict';
-import { createSuite } from '../testing/mocha.js';
-import { outdent } from './outdent-template-tag.js';
 
 createSuite(import.meta.url);
 
