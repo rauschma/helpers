@@ -2,9 +2,9 @@
   "name": "@rauschma/helpers",
   "version": "0.1.0",
   "type": "module",
-  "author": "Axel Rauschmayer",
-  "repository": "github:rauschma/helpers",
   "license": "MIT",
+  "repository": "github:rauschma/helpers",
+  "author": "Axel Rauschmayer",
   "exports": {
     "./*": "./dist/src/*"
   },
@@ -33,6 +33,7 @@
     "!src/**/*_test.ts"
   ],
   "scripts": {
+    "\n========== Building ==========": "",
     "build": "npm run clean && tsc",
     "watch": "tsc --watch",
     "clean": "shx rm -rf ./dist/*",
