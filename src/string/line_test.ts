@@ -4,8 +4,48 @@ import assert from 'node:assert/strict';
 
 test('splitLinesInclEol', () => {
   assert.deepEqual(
-    splitLinesInclEol('\n\nthere\nare\r\nmultiple\nlines'),
-    ['\n', '\n', 'there\n', 'are\r\n', 'multiple\n', 'lines']
+    splitLinesInclEol(''),
+    ['']
+  );
+  assert.deepEqual(
+    splitLinesInclEol('abc'),
+    ['abc']
+  );
+
+  // One line break at the beginning
+  assert.deepEqual(
+    splitLinesInclEol('\nabc'),
+    ['\n', 'abc']
+  );
+  assert.deepEqual(
+    splitLinesInclEol('\r\nabc'),
+    ['\r\n', 'abc']
+  );
+
+  // One line break at the end
+  assert.deepEqual(
+    splitLinesInclEol('abc\n'),
+    ['abc\n']
+  );
+  assert.deepEqual(
+    splitLinesInclEol('abc\r\n'),
+    ['abc\r\n']
+  );
+
+  // One line break in the middle
+  assert.deepEqual(
+    splitLinesInclEol('abc\ndef'),
+    ['abc\n', 'def']
+  );
+  assert.deepEqual(
+    splitLinesInclEol('abc\r\ndef'),
+    ['abc\r\n', 'def']
+  );
+
+  // Two line breaks
+  assert.deepEqual(
+    splitLinesInclEol('\r\na\nb'),
+    ['\r\n', 'a\n', 'b']
   );
 });
 
