@@ -41,9 +41,9 @@
     "test": "mocha --enable-source-maps --ui qunit",
     "testall": "mocha --enable-source-maps --ui qunit \"./dist/**/*_test.js\"",
     "\n========== Publishing ==========": "",
-    "dry-run": "npm publish --dry-run",
     "prepublishOnly": "npm run build",
-    "pack": "npm pack && (tar --list --file rauschma-helpers-*.tgz | sort) && rm -f rauschma-helpers-*.tgz"
+    "publishd": "npm publish --dry-run",
+    "packd": "npm pack --dry-run"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
