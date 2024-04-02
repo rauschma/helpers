@@ -45,9 +45,10 @@ export function assertTrue(value: boolean, message=''): asserts value {
   }
 }
 
-export function assertNonNullable<T>(value: T): asserts value is NonNullable<T> {
+export function assertNonNullable<T>(value: T, message?: string): asserts value is NonNullable<T> {
   if (value === undefined || value === null) {
-    throw new TypeError('Value must not be undefined or null');
+    message ??= 'Value must not be undefined or null';
+    throw new TypeError('Failed: ' + message);
   }
 }
 

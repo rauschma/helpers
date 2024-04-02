@@ -1,9 +1,12 @@
 {
   "name": "@rauschma/helpers",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "license": "MIT",
-  "repository": "github:rauschma/helpers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rauschma/helpers.git"
+  },
   "author": "Axel Rauschmayer",
   "exports": {
     "./*": "./dist/src/*"
