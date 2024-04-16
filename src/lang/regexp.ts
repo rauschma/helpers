@@ -28,24 +28,31 @@ export function setLastIndex(matchMode: MatchMode, regExp: RegExp, lastIndex: nu
 }
 
 /**
- * - Based on {@link https://github.com/tc39/proposal-regex-escaping/blob/main/EscapedChars.md|this list}
+ * - Based on
+ *   {@link https://github.com/tc39/proposal-regex-escaping/blob/main/EscapedChars.md this list}
  *   - Ignored: escaping text for `eval()`
- * - Changes needed for upcoming `/v` flag: {@link https://github.com/tc39/proposal-regexp-v-flag/issues/71}
+ * - Changes needed for upcoming `/v` flag:
+ *   {@link https://github.com/tc39/proposal-regexp-v-flag/issues/71}
  */
 const specialAnywhere = [
-  raw`\^`, raw`\$`,
+  // We escape all characters even though they are put inside a character
+  // class, to be ready for future changes.
+  raw`\^`, raw`$`,
   raw`\\`,
   raw`\.`,
   raw`\*`, raw`\+`, raw`\?`,
   raw`\(`, raw`\)`, raw`\[`, raw`\]`, raw`\{`, raw`\}`,
   raw`\|`,
-  raw`\-`, // inside character classes (square brackets)
+  // Omitted – not allowed by /u
+  // raw`\-`, // inside character classes (square brackets)
 ];
 // Only first character of string needs to be escaped in these cases:
 const specialAtStart = [
+  // Alas, both cases have to be omitted because they are not allowed by /u
   // - Decimal digits: inserting after (e.g.) `\1`
-  // - All (hex digits): inserting after (e.g.) `\u004`
-  raw`0-9a-fA-F`,
+  // - Hex digits: inserting after (e.g.) `\u004`
+  // `0-9A-Za-z`,
+  ``,
 ];
 const re_specialCharacters = new RegExp(
   raw`[${specialAnywhere.join('')}]|^[${specialAtStart.join('')}]`,
