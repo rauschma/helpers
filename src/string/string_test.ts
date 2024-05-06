@@ -10,6 +10,10 @@ test('Composing regular expressions', () => {
     insertVariables(vars, '[{{first}} {{last}}]'),
     '[Robin Doe]'
   );
+  assert.equal(
+    insertVariables(vars, '{{first}} {{last}}'),
+    'Robin Doe'
+  );
   assert.throws(
     () => insertVariables(vars, '{{unknown}}'),
     {

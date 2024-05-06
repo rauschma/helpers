@@ -28,6 +28,18 @@ export function removePrefixMaybe(str: string, prefix: string) {
   }
 }
 
+export function removeSuffix(str: string, suffix: string) {
+  assertTrue(str.endsWith(suffix));
+  return str.slice(0, -suffix.length);
+}
+export function removeSuffixMaybe(str: string, suffix: string) {
+  if (str.endsWith(suffix)) {
+    return str.slice(0, -suffix.length);
+  } else {
+    return str;
+  }
+}
+
 const RE_EMTPY_LINE = /^[\t \r\n]*$/u;
 export function isEmptyLine(str: string): boolean {
   return RE_EMTPY_LINE.test(str);

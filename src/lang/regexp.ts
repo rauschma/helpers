@@ -43,7 +43,7 @@ const specialAnywhere = [
   raw`\*`, raw`\+`, raw`\?`,
   raw`\(`, raw`\)`, raw`\[`, raw`\]`, raw`\{`, raw`\}`,
   raw`\|`,
-  // Omitted – not allowed by /u
+  // Omitted – not currently allowed by /u
   // raw`\-`, // inside character classes (square brackets)
 ];
 // Only first character of string needs to be escaped in these cases:
