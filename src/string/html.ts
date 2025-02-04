@@ -1,6 +1,6 @@
-import { createPlainTextEscaper } from './escaper.js';
+import { createPlainTextEscaper, type Escaper } from './escaper.js';
 
-export const escapeHtml = createPlainTextEscaper([
+export const escapeHtml: Escaper = createPlainTextEscaper([
   ['&', '&amp;'],
   ['>', '&gt;'],
   ['<', '&lt;'],

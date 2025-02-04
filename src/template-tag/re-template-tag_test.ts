@@ -1,7 +1,10 @@
 import { re } from '@rauschma/helpers/template-tag/re-template-tag.js';
+import { createSuite } from '@rauschma/helpers/testing/mocha.js';
 import assert from 'node:assert/strict';
 
 // FIXME: test escaped substitutions and escaped dollar signs
+
+createSuite(import.meta.url);
 
 test('Composing regular expressions', () => {
   const RE_YEAR = /([0-9]{4})/;
@@ -60,8 +63,10 @@ test('Escaping backticks', () => {
   const RE_BACKTICK = re`/^\`$/u`;
   assert.equal(RE_BACKTICK.source, '^`$');
   assert.ok(RE_BACKTICK.test('`'));
-  // No escaping of backticks in dynamic text:
-  const str = '`\\`';
-  assert.equal(re`/${str}/`.source, '`\\\\`');
-    // Single backslash in `str` is escaped inside regular expression
+
+  // Dynamic text is escaped via RegExp.escape():
+  assert.equal(
+    re`/${'`\\`'}/`.source,
+    String.raw`\x60\\\x60`
+  );
 });

@@ -1,12 +1,15 @@
 import { escapeForRegExp } from '../lang/regexp.js';
+import { assertNonNullable } from '../typescript/type.js';
 
 export function re(templateStrings: TemplateStringsArray, ...substitutions: unknown[]): RegExp {
   // templateStrings.length = 1 + substitutions.length
   // There is always at least one template string
   const lastTmplStr = templateStrings.raw[templateStrings.length-1];
+  assertNonNullable(lastTmplStr);
   let reStr = '';
   for (const [i, subst] of substitutions.entries()) {
     const curTmplStr = templateStrings.raw[i];
+    assertNonNullable(curTmplStr);
     reStr += handleEscapedBackticks(curTmplStr);
 
     if (typeof subst === 'string') {

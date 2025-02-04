@@ -1,6 +1,6 @@
 import { assertTrue } from '../typescript/type.js';
 
-export function insertVariables(variables: Map<string, string>, pattern: string) {
+export function insertVariables(variables: Map<string, string>, pattern: string): string {
   return pattern.replace(
     /(?:\\)?\{\{([^{}]+)\}\}/g,
     (all, group1) => {
@@ -16,11 +16,11 @@ export function insertVariables(variables: Map<string, string>, pattern: string)
   )
 }
 
-export function removePrefix(str: string, prefix: string) {
+export function removePrefix(str: string, prefix: string): string {
   assertTrue(str.startsWith(prefix));
   return str.slice(prefix.length);
 }
-export function removePrefixMaybe(str: string, prefix: string) {
+export function removePrefixMaybe(str: string, prefix: string): string {
   if (str.startsWith(prefix)) {
     return str.slice(prefix.length);
   } else {
@@ -28,11 +28,11 @@ export function removePrefixMaybe(str: string, prefix: string) {
   }
 }
 
-export function removeSuffix(str: string, suffix: string) {
+export function removeSuffix(str: string, suffix: string): string {
   assertTrue(str.endsWith(suffix));
   return str.slice(0, -suffix.length);
 }
-export function removeSuffixMaybe(str: string, suffix: string) {
+export function removeSuffixMaybe(str: string, suffix: string): string {
   if (str.endsWith(suffix)) {
     return str.slice(0, -suffix.length);
   } else {

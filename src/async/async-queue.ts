@@ -1,84 +1,79 @@
-import { ArrayQueue } from '../collection/array-queue.js';
-import { assertNonNullable, assertTrue } from '../typescript/type.js';
-import { promiseWithResolvers, type PromiseWithResolvers } from './promise.js';
+import { promiseWithResolvers } from './promise.js';
 
 /**
  * This class is a queue that works asynchronously:
- * - Enqueuing via `.enqueue()` is manual and synchronous (non-blocking)
- *   and can be done multiple times.
+ * - Enqueuing via `.put()` is manual and synchronous (non-blocking) and
+ *   can be done multiple times.
  *   - Rationale: Needed so that we can turn a callback-based (push) API
  *     into an asynchronous-iteration-based (pull) API.
  * - Dequeuing is done via async iteration, which invokes method `.next()`.
  *   This operation blocks asynchronously until data is enqueued.
  */
 export class AsyncQueue<T> {
-  #enqueuedValues = new ArrayQueue<T>();
+  // We dequeue here
+  #frontPromise: null | Promise<QueueElement<T>>;
+  // We enqueue here
+  #backResolve: null | ((result: QueueElement<T>) => void);
+  constructor() {
+    const { promise, resolve } = promiseWithResolvers<QueueElement<T>>();
+    this.#frontPromise = promise;
+    this.#backResolve = resolve;
+  }
   /**
-   * If no values are enqueued and a value is dequeued, this Promise is
-   * used to notify the dequeuer when a value is available. In other words:
-   * If this field is non-null, there are no enqeued values.
+   * Enqueuing. This method is non-blocking. It can be called as often as
+   * you want and will buffer if more is enqeued than dequeued.
    */
-  #pendingValue: null | PromiseWithResolvers<IteratorResult<T>> = null;
-  #closed = false;
-
-  [Symbol.asyncIterator]() {
+  put(value: T): this {
+    if (this.#backResolve === null) {
+      // We can’t enqueue anymore
+      throw new Error('Queue is closed');
+    }
+    const { resolve, promise } = promiseWithResolvers<QueueElement<T>>();
+    this.#backResolve({ value, promise });
+    this.#backResolve = resolve;
     return this;
   }
-
-  /**
-   * Enqueuing is done manually.
-   *
-   * This method is non-blocking. It can be called as often as you want and
-   * will buffer if more is enqeued than dequeued.
-   */
-  enqueue(value: T): this {
-    if (this.#closed) {
-      throw new Error('Closed');
+  close(): this {
+    if (this.#backResolve === null) {
+      // Queue is already closed
+      return this;
     }
-    if (this.#pendingValue) {
-      assertTrue(this.#enqueuedValues.length === 0);
-      this.#pendingValue.resolve({done: false, value});
-      this.#pendingValue = null;
-    } else {
-      this.#enqueuedValues.enqueue(value);
-    }
+    this.#backResolve(
+      { promise: null }
+    );
+    this.#backResolve = null;
     return this;
   }
-
   /**
-   * Dequeuing is done via async iteration.
-   *
-   * This method is blocking. That is, it must not be called again before
-   * its result has settled.
+   * Dequeuing is done via async iteration. This method blocks
+   * asynchronously if the queue is empty.
    */
   next(): Promise<IteratorResult<T>> {
-    if (this.#pendingValue) {
-      throw new Error('Promise of previous invocation has not settled yet');
+    if (this.#frontPromise === null) {
+      // We already reached the last Promise below
+      return Promise.resolve({ done: true, value: undefined });
     }
-    if (this.#enqueuedValues.length > 0) {
-      const value = this.#enqueuedValues.dequeue();
-      assertNonNullable(value);
-      return Promise.resolve({done: false, value});
-    }
-    // No more values enqueued: Can we expect more or are we done?
-    if (this.#closed) {
-      return Promise.resolve({done: true, value: undefined});
-    }
-    // Wait for new enqueued values or closing
-    const promiseWithSettlers = promiseWithResolvers<IteratorResult<T>>();
-    this.#pendingValue = promiseWithSettlers;
-    return promiseWithSettlers.promise;
+    return this.#frontPromise.then(
+      (front): IteratorResult<T> => {
+        this.#frontPromise = front.promise; // may be null
+        if (front.promise === null) {
+          return { done: true, value: undefined };
+        }
+        return { done: false, value: front.value };
+      }
+    );
   }
-
-  close(): this {
-    if (this.#closed) return this;
-    this.#closed = true;
-    if (this.#pendingValue) {
-      assertTrue(this.#enqueuedValues.length === 0);
-      this.#pendingValue.resolve({done: true, value: undefined});
-      this.#pendingValue = null;
-    }
-    // If values are enqueued, we allow them to be read
+  [Symbol.asyncIterator](): this {
     return this;
   }
 }
+
+type QueueElement<T> =
+  | {
+    promise: Promise<QueueElement<T>>,
+    value: T,
+  }
+  | {
+    promise: null,
+  }
+  ;

@@ -39,18 +39,10 @@ export function isInstanceOf<T>(value: unknown, theClass: PotentiallyAbstractCla
  * Useful whenever you don’t want to use Node’s built-in `assert()` or
  * `assert.ok()` – e.g. in browsers.
  */
-export function assertTrue(value: boolean, message=''): asserts value {
+export function assertTrue(value: boolean, message='Assertion failed'): asserts value {
   if (!value) {
     throw new TypeError(message);
   }
-}
-
-export function toNonNullable<T>(value: T, message?: string): NonNullable<T> {
-  if (value === undefined || value === null) {
-    message ??= 'Value must not be undefined or null';
-    throw new TypeError('Failed: ' + message);
-  }
-  return value;
 }
 
 export function assertNonNullable<T>(value: T, message?: string): asserts value is NonNullable<T> {
@@ -58,6 +50,14 @@ export function assertNonNullable<T>(value: T, message?: string): asserts value 
     message ??= 'Value must not be undefined or null';
     throw new TypeError('Failed: ' + message);
   }
+}
+
+export function toNonNullableOrThrow<T>(value: T, message?: string): NonNullable<T> {
+  if (value === undefined || value === null) {
+    message ??= 'Value must not be undefined or null';
+    throw new TypeError('Failed: ' + message);
+  }
+  return value;
 }
 
 //#################### Type guards ####################
@@ -90,11 +90,6 @@ export function isArrayOfInstances<T>(instanceClass: PotentiallyAbstractClass<T>
 }
 
 //#################### Miscellaneous ####################
-
-export function nonNullableOrThrow<T>(value: T): NonNullable<T> {
-  assertNonNullable(value);
-  return value;
-}
 
 export type SafeOmit<T, Keys extends keyof T> = Omit<T, Keys>;
 

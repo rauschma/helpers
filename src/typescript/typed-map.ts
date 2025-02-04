@@ -20,7 +20,7 @@ export class TypedMap {
     }
     return value;
   }
-  keyClassNames() {
+  keyClassNames(): string[] {
     return Array.from(
       this.#map.keys(),
       theClass => theClass.name

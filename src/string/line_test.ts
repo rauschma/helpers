@@ -1,6 +1,9 @@
 import { arrayFromAsync } from '@rauschma/helpers/async/async-iteration.js';
 import { chunksToLinesAsync, splitLinesExclEol, splitLinesInclEol, trimEol } from '@rauschma/helpers/string/line.js';
+import { createSuite } from '@rauschma/helpers/testing/mocha.js';
 import assert from 'node:assert/strict';
+
+createSuite(import.meta.url);
 
 test('splitLinesInclEol', () => {
   assert.deepEqual(

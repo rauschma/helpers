@@ -10,3 +10,10 @@ export function* mapIterable<S,T>(iterable: Iterable<S>, callback: (from: S, ind
     index++;
   }
 }
+export function* entriesOfIterable<T>(iterable: Iterable<T>): Iterable<[number, T]> {
+  let index = 0;
+  for (const x of iterable) {
+    yield [index, x];
+    index++;
+  }
+}

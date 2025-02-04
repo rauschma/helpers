@@ -1,11 +1,13 @@
 import { escapeForRegExp } from '../lang/regexp.js';
 import { assertTrue } from '../typescript/type.js';
 
+export type Escaper = (str: string) => string;
+
 export type SearchAndReplace = {
   search: RegExp,
   replace: string,
 };
-export function createSequentialRegExpEscaper(searchAndReplaceArr: Array<SearchAndReplace>): (str: string) => string {
+export function createSequentialRegExpEscaper(searchAndReplaceArr: Array<SearchAndReplace>): Escaper {
   for (const sar of searchAndReplaceArr) {
     if (!sar.search.global) {
       // Also enforced by .replaceAll(), but we want to fail early
@@ -23,7 +25,7 @@ export function createSequentialRegExpEscaper(searchAndReplaceArr: Array<SearchA
 /**
  * Performs plain text replacements simultaneously.
  */
-export function createPlainTextEscaper(charToReplacementPairs: Array<[string, string]>): (str: string) => string {
+export function createPlainTextEscaper(charToReplacementPairs: Array<[string, string]>): Escaper {
   // An object literal as a parameter would be nicer, syntactically.
   // Alas, it wouldn’t preserve the order of the listed entries.
   const charRegExp = new RegExp(
@@ -52,7 +54,7 @@ const GROUP_PREFIX = '$$$';
  *   `$<groupName>`. Since we use a function as the second .replace()
  *   argument, we’d have to implement this functionality ourselves.
  */
-export function createSimultaneousRegExpEscaper(searchAndReplacePairs: Array<[string, string]>, flags='gu'): (str: string) => string {
+export function createSimultaneousRegExpEscaper(searchAndReplacePairs: Array<[string, string]>, flags='gu'): Escaper {
   // Considerations:
   // - An object literal as a parameter would be nicer, syntactically.
   //   Alas, it wouldn’t preserve the order of the listed entries if some

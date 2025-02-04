@@ -1,4 +1,4 @@
-import { assertTrue } from '../typescript/type.js';
+import { assertNonNullable, assertTrue, toNonNullableOrThrow } from '../typescript/type.js';
 import { trimEol, splitLinesExclEol } from '../string/line.js';
 
 const RE_LINE_BREAK = /^(?<lineBreak>\r?\n)(?<indent>[ \t]*)/;
@@ -8,14 +8,17 @@ const RE_STARTS_WITH_EOL = /^(\r?\n)/;
 /**
  * @returns A string that neither starts nor ends with whitespace.
  */
-export function outdent(templateStrings: TemplateStringsArray, ...substitutions: any[]) {
-  const firstTmplStr = templateStrings.raw[0];
+export function outdent(templateStrings: TemplateStringsArray, ...substitutions: any[]): string {
+  const firstTmplStr = templateStrings.raw[0]; // guaranteed to exist
+  assertNonNullable(firstTmplStr);
   const lineBreakMatch = RE_LINE_BREAK.exec(firstTmplStr);
   if (!lineBreakMatch || !lineBreakMatch.groups) {
     return String.raw(templateStrings, ...substitutions);
   }
-  const indent = lineBreakMatch.groups.indent;
-  const leadingLineBreak = lineBreakMatch.groups.lineBreak;
+  const indent = lineBreakMatch.groups['indent'];
+  assertNonNullable(indent);
+  const leadingLineBreak = lineBreakMatch.groups['lineBreak'];
+  assertNonNullable(leadingLineBreak);
 
   const builder = new Builder(indent, templateStrings.raw.length);
 
@@ -24,7 +27,9 @@ export function outdent(templateStrings: TemplateStringsArray, ...substitutions:
   builder.visitTmplStr(firstTmplStr.slice(leadingLineBreak.length), 0);
   for (let [index, subst] of substitutions.entries()) {
     const before = templateStrings.raw[index];
+    assertNonNullable(before);
     const after = templateStrings.raw[index+1];
+    assertNonNullable(after);
     builder.visitSubst(before, subst, after);
     builder.visitTmplStr(after, index+1);
   }
@@ -73,18 +78,21 @@ class Builder {
     if (this.#linePos === LinePos.LineStart) {
       const lineMatch = RE_LINE.exec(str);
       assertTrue(lineMatch !== null && lineMatch.groups !== undefined);
-      const indent = lineMatch.groups.indent;
+      const indent = lineMatch.groups['indent'];
+      assertNonNullable(indent);
+      const content = lineMatch.groups['content'];
+      assertNonNullable(content);
       if (indent.startsWith(this.#outdent)) {
         // Remove dedent from the fragment’s indent
         this.#curIndent = indent.slice(this.#outdent.length);
         this.#str += this.#curIndent;
-        this.#str += lineMatch.groups.content;
+        this.#str += content;
       } else {
         // Unexpected indent: completely remove it
         this.#curIndent = indent;
-        this.#str += lineMatch.groups.content;
+        this.#str += content;
       }
-      if (lineMatch.groups.content.length === 0) {
+      if (content.length === 0) {
         this.#linePos = LinePos.AfterIndent;
       } else {
         this.#linePos = LinePos.InsideLine;
@@ -106,11 +114,11 @@ class Builder {
     );
     if (canInsertMultipleLines) {
       if (Array.isArray(subst)) {
-        this.#appendLines(subst, followedByEolMatch[1]);
+        this.#appendLines(subst, toNonNullableOrThrow(followedByEolMatch[1]));
         return;
       }
       if (typeof subst === 'string' && subst.includes('\n')) {
-        this.#appendLines(splitLinesExclEol(subst), followedByEolMatch[1]);
+        this.#appendLines(splitLinesExclEol(subst), toNonNullableOrThrow(followedByEolMatch[1]));
         return;
       }
     }

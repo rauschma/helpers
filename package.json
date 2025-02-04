@@ -14,26 +14,26 @@
   "// files": [
     "We can jump to TS source code, thanks to declarationMap:true in tsconfig.json",
     "Example:",
+    "src/event.ts",
     "dist/src/event.js",
     "dist/src/event.js.map",
     "dist/src/event.d.ts",
-    "dist/src/event.d.ts.map",
-    "src/event.ts"
+    "dist/src/event.d.ts.map"
   ],
   "files": [
     "package.json",
     "README.md",
     "LICENSE",
+    "src/**/*.ts",
     "dist/**/*.js",
     "dist/**/*.js.map",
     "dist/**/*.d.ts",
     "dist/**/*.d.ts.map",
-    "src/**/*.ts",
+    "!src/**/*_test.ts",
     "!dist/**/*_test.js",
     "!dist/**/*_test.js.map",
     "!dist/**/*_test.d.ts",
-    "!dist/**/*_test.d.ts.map",
-    "!src/**/*_test.ts"
+    "!dist/**/*_test.d.ts.map"
   ],
   "scripts": {
     "\n========== Building ==========": "",
@@ -43,6 +43,8 @@
     "\n========== Testing ==========": "",
     "test": "mocha --enable-source-maps --ui qunit",
     "testall": "mocha --enable-source-maps --ui qunit \"./dist/**/*_test.js\"",
+    "\n========== TypeDoc ==========": "",
+    "api": "shx rm -rf api/ && typedoc --out docs/api --readme none --entryPoints src --entryPointStrategy expand --exclude '**/*_test.ts'",
     "\n========== Publishing ==========": "",
     "prepublishOnly": "npm run build",
     "publishd": "npm publish --dry-run",
@@ -50,9 +52,10 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.10.6",
-    "mocha": "^10.2.0",
-    "shx": "^0.3.4"
+    "@types/node": "^20.12.12",
+    "mocha": "^10.4.0",
+    "shx": "^0.3.4",
+    "typedoc": "^0.27.6"
   },
   "// devDependencies": {
     "@types/node": "For unit tests (node:assert)"

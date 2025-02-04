@@ -31,7 +31,7 @@ export function splitLinesExclEol(text: string): Array<string> {
 }
 
 const RE_EOL = /\r?\n$/;
-export function trimEol(line: string) {
+export function trimEol(line: string): string {
   const lineTerminatorIndex = line.search(RE_EOL);
   if (lineTerminatorIndex < 0) return line;
   return line.slice(0, lineTerminatorIndex);

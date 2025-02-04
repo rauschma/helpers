@@ -1,5 +1,8 @@
 import { insertVariables } from '@rauschma/helpers/string/string.js';
+import { createSuite } from '@rauschma/helpers/testing/mocha.js';
 import assert from 'node:assert/strict';
+
+createSuite(import.meta.url);
 
 test('Composing regular expressions', () => {
   const vars = new Map([
