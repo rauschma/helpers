@@ -17,6 +17,8 @@ export function shuffleArray<T>(arr: Array<T>): Array<T> {
 }
 
 /**
+ * Split `arr` into chunks with length `chunkLen` and return them in an
+ * Array.
  * {@includeCode ./array_test.ts#arrayToChunks}
  */
 export function arrayToChunks<T>(arr: Array<T>, chunkLen: number): Array<Array<T>> {

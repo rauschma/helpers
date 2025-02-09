@@ -1,5 +1,6 @@
 /**
- * Error class that supports exhaustiveness checks.
+ * Error class that produces a compile-time error if cases for a value
+ * weren’t covered exhaustively (e.g. via `switch`).
  * {@includeCode ./error_test.ts#UnexpectedValueError}
  */
 export class UnexpectedValueError extends Error {

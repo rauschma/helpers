@@ -4,7 +4,6 @@ import { UnexpectedValueError } from '@rauschma/helpers/typescript/error.js';
 createSuite(import.meta.url);
 
 test('UnexpectedValueError: all cases are there', () => {
-  //#region UnexpectedValueError
   enum Color { Red, Green }
   function colorToString(color: Color) {
     switch (color) {
@@ -16,10 +15,10 @@ test('UnexpectedValueError: all cases are there', () => {
         throw new UnexpectedValueError(color);
     }
   }
-  //#end UnexpectedValueError
 });
 
 test('UnexpectedValueError: a case is missing', () => {
+  //#region UnexpectedValueError
   enum Color { Red, Green }
   function colorToString(color: Color) {
     switch (color) {
@@ -31,4 +30,5 @@ test('UnexpectedValueError: a case is missing', () => {
         throw new UnexpectedValueError(color);
     }
   }
+  //#endregion UnexpectedValueError
 });
