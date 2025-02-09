@@ -51,11 +51,11 @@
     "packd": "npm pack --dry-run"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.12.12",
-    "mocha": "^10.4.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.13.1",
+    "mocha": "^11.1.0",
     "shx": "^0.3.4",
-    "typedoc": "^0.27.6"
+    "typedoc": "^0.27.7"
   },
   "// devDependencies": {
     "@types/node": "For unit tests (node:assert)"
