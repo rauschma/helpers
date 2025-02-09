@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 
 createSuite(import.meta.url);
 
-test('randomInteger', async () => {
+test('randomInteger', () => {
   // Repeat 5 times
   for (let i = 1; i <= 5; i++) {
     const min = i;

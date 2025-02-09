@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 
 createSuite(import.meta.url);
 
-test('shuffleArray', async () => {
+test('shuffleArray', () => {
   const arr = ['A', 'B', 'C', 'D'];
   // Repeat 5 times
   for (let i = 1; i <= 5; i++) {
@@ -13,7 +13,9 @@ test('shuffleArray', async () => {
   }
 });
 
-test('arrayToChunks', async () => {
+test('arrayToChunks', () => {
+
+  //#region arrayToChunks
   const arr = ['a', 'b', 'c', 'd'];
   assert.deepEqual(
     arrayToChunks(arr, 1),
@@ -23,6 +25,8 @@ test('arrayToChunks', async () => {
     arrayToChunks(arr, 2),
     [['a', 'b'], ['c', 'd']],
   );
+  //#endregion arrayToChunks
+
   assert.deepEqual(
     arrayToChunks(arr, 3),
     [['a', 'b', 'c'], ['d']],

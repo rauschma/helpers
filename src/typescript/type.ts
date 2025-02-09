@@ -72,10 +72,10 @@ type TypeofLookupTable = {
   'object': null | object,
   'function': Function,
 };
-export type TypeofString = keyof TypeofLookupTable;
-export type TypeofStringToType<S extends TypeofString> = TypeofLookupTable[S];
+export type TypeofResult = keyof TypeofLookupTable;
+export type TypeofStringToType<S extends TypeofResult> = TypeofLookupTable[S];
 
-export function isArrayOfPrimitives<T extends TypeofString>(typeofString: T, value: unknown): value is Array<TypeofStringToType<T>> {
+export function isArrayOfPrimitives<T extends TypeofResult>(typeofString: T, value: unknown): value is Array<TypeofStringToType<T>> {
   if (!Array.isArray(value)) {
     return false;
   }

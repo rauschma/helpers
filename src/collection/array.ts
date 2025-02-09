@@ -16,6 +16,9 @@ export function shuffleArray<T>(arr: Array<T>): Array<T> {
   return arr;
 }
 
+/**
+ * {@includeCode ./array_test.ts#arrayToChunks}
+ */
 export function arrayToChunks<T>(arr: Array<T>, chunkLen: number): Array<Array<T>> {
   const result = [];
   const chunkCount = Math.ceil(arr.length / chunkLen);
