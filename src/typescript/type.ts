@@ -1,10 +1,18 @@
 //#################### Class ####################
 
 /**
- * Pitfall: can’t be used for abstract classes.
- * @see https://exploringjs.com/tackling-ts/ch_classes-as-values.html#pitfall-classt-does-not-match-abstract-classes
+ * Utility type for writing types for classes more concisely.
+ * {@includeCode ./type_test.ts#Class}
+ *
+ * If the class has to be instantiable, you must use
+ * {@link InstantiableClass}.
  */
-export type Class<T> = new (...args: any[]) => T;
+export type Class<T> = abstract new (...args: Array<any>) => T;
+
+/**
+ * Casting works for instantiable classes and abstract classes. That’s why
+ * we use {@link Class}.
+ */
 export function cast<T>(theClass: Class<T>, value: any): T {
   if (! (value instanceof theClass)) {
     throw new TypeError(`Expected class: ${theClass.name} Actual class: ${value.constructor.name}`);
@@ -12,26 +20,13 @@ export function cast<T>(theClass: Class<T>, value: any): T {
   return value;
 }
 
-//#################### PotentiallyAbstractClass ####################
-
 /**
- * Avoid this class. If you can, use {@link Class}.
- * @see https://exploringjs.com/tackling-ts/ch_classes-as-values.html#pitfall-classt-does-not-match-abstract-classes
+ * Utility type for writing types for classes more concisely.
+ * {@includeCode ./type_test.ts#InstantiableClass}
+ *
+ * If the class may be abstract, you must use {@link Class}.
  */
-export type PotentiallyAbstractClass<T> = Function & {prototype: T};
-
-export function potentiallyAbstractCast<T>(theClass: PotentiallyAbstractClass<T>, value: any): T {
-  // Downside of `PotentiallyAbstractClass`: `instanceof` does not narrow types.
-  // That’s why we have to use a custom function here
-  if (! isInstanceOf(value, theClass)) {
-    throw new TypeError(`Expected class: ${theClass.name} Actual class: ${value.constructor.name}`);
-  }
-  return value;
-}
-
-export function isInstanceOf<T>(value: unknown, theClass: PotentiallyAbstractClass<T>): value is T {
-  return theClass.prototype.isPrototypeOf(value);
-}
+export type InstantiableClass<T> = new (...args: Array<any>) => T;
 
 //#################### Assertion functions ####################
 
@@ -82,16 +77,23 @@ export function isArrayOfPrimitives<T extends TypeofResult>(typeofString: T, val
   return value.every(x => typeof x === typeofString);
 }
 
-export function isArrayOfInstances<T>(instanceClass: PotentiallyAbstractClass<T>, value: unknown): value is Array<T> {
+export function isArrayOfInstances<T>(instanceClass: Class<T>, value: unknown): value is Array<T> {
   if (!Array.isArray(value)) {
     return false;
   }
-  return value.every(x => isInstanceOf(x, instanceClass));
+  return value.every(x => x instanceof instanceClass);
 }
 
 //#################### Miscellaneous ####################
 
+/**
+ * Checks at compile time that the `Keys` to omit from `T` actually exist –
+ * which prevents typos.
+ * 
+ * @see [Related GitHub issue](https://github.com/microsoft/TypeScript/issues/30825)
+ */
 export type SafeOmit<T, Keys extends keyof T> = Omit<T, Keys>;
+// TODO: better name
 
 /**
  * Example:
