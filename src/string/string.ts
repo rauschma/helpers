@@ -18,26 +18,34 @@ export function insertVariables(variables: Map<string, string>, pattern: string)
 
 export function removePrefix(str: string, prefix: string): string {
   assertTrue(str.startsWith(prefix));
-  return str.slice(prefix.length);
+  return removePrefixUnchecked(str, prefix);
 }
 export function removePrefixMaybe(str: string, prefix: string): string {
   if (str.startsWith(prefix)) {
-    return str.slice(prefix.length);
+    return removePrefixUnchecked(str, prefix);
   } else {
     return str;
   }
+}
+export function removePrefixUnchecked(str: string, prefix: string): string {
+  return str.slice(prefix.length);
 }
 
 export function removeSuffix(str: string, suffix: string): string {
   assertTrue(str.endsWith(suffix));
-  return str.slice(0, -suffix.length);
+  return removeSuffixUnchecked(str, suffix);
 }
 export function removeSuffixMaybe(str: string, suffix: string): string {
   if (str.endsWith(suffix)) {
-    return str.slice(0, -suffix.length);
+    return removeSuffixUnchecked(str, suffix);
   } else {
     return str;
   }
+}
+export function removeSuffixUnchecked(str: string, suffix: string): string {
+  // The second argument can’t be -suffix.length because that doesn’t work
+  // if `suffix` is empty.
+  return str.slice(0, str.length - suffix.length);
 }
 
 const RE_EMTPY_LINE = /^[\t \r\n]*$/u;
