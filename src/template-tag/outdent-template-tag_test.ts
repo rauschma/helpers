@@ -23,6 +23,7 @@ test('Multi-line substitution between two lines (text)', () => {
         ${lines}
       AFTER
     `.replaceAll(' ', '·'),
+    // line#2 is still indented relative to line#1
     'BEFORE\n··line#1\n····line#2\nAFTER'
   );
 });
