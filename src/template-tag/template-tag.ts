@@ -16,7 +16,7 @@ export function stringCooked(templateStrings: TemplateStringsArray, ...substitut
   return result;
 }
 
-export type TagFunction<R> = (
+export type TagFunction<Substs = unknown, Result = string> = (
   templateStrings: TemplateStringsArray,
-  ...substitutions: unknown[]
-) => R;
+  ...substitutions: Array<Substs>
+) => Result;
