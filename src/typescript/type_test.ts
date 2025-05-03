@@ -1,5 +1,5 @@
 import { createSuite } from '@rauschma/helpers/testing/mocha.js';
-import type { Class, InstantiableClass } from '@rauschma/helpers/typescript/type.js';
+import type { Class, NewableClass } from '@rauschma/helpers/typescript/type.js';
 
 createSuite(import.meta.url);
 
@@ -15,11 +15,11 @@ test('Class<T>', () => {
   //#endregion Class
 });
 
-test('InstantiableClass<T>', () => {
-  //#region InstantiableClass
-  function createInstance<T>(aClass: InstantiableClass<T>): T {
+test('NewableClass<T>', () => {
+  //#region NewableClass
+  function createInstance<T>(aClass: NewableClass<T>): T {
     return new aClass();
   }
   const instance: RegExp = createInstance(RegExp);
-  //#endregion InstantiableClass
+  //#endregion NewableClass
 });

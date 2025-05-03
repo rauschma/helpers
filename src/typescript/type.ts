@@ -5,7 +5,7 @@
  * {@includeCode ./type_test.ts#Class}
  *
  * If the class has to be instantiable, you must use
- * {@link InstantiableClass}.
+ * {@link NewableClass}.
  */
 export type Class<T> = abstract new (...args: Array<any>) => T;
 
@@ -21,12 +21,17 @@ export function cast<T>(theClass: Class<T>, value: any): T {
 }
 
 /**
+ * @deprecated Use {@link NewableClass}
+ */
+export type InstantiableClass<T> = new (...args: Array<any>) => T;
+
+/**
  * Utility type for writing types for classes more concisely.
- * {@includeCode ./type_test.ts#InstantiableClass}
+ * {@includeCode ./type_test.ts#NewableClass}
  *
  * If the class may be abstract, you must use {@link Class}.
  */
-export type InstantiableClass<T> = new (...args: Array<any>) => T;
+export type NewableClass<T> = new (...args: Array<any>) => T;
 
 //#################### Assertion functions ####################
 
@@ -104,10 +109,12 @@ export type SafeOmit<T, Keys extends keyof T> = Omit<T, Keys>;
  *   Green: 'Green',
  *   Blue: 'Blue',
  * } as const;
- * type Color = PropertyValues<typeof Color>;
+ * type ColorType = PropertyValues<typeof Color>;
  * ```
  */
 export type PropertyValues<Obj> = Obj[keyof Obj];
+
+export type SetElementType<S> = S extends Set<infer E> ? E : never;
 
 //========== PublicDataProperties ==========
 
