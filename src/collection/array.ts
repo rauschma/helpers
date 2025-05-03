@@ -1,5 +1,4 @@
 import { randomInteger } from '../lang/number.js';
-import { assertNonNullable } from '../typescript/type.js';
 
 /**
  * @see https://en.wikipedia.org/wiki/Fisher–Yates_shuffle#The_modern_algorithm
@@ -7,11 +6,7 @@ import { assertNonNullable } from '../typescript/type.js';
 export function shuffleArray<T>(arr: Array<T>): Array<T> {
   for (let i = arr.length-1; i >= 1; i--) {
     const j = randomInteger(0, i);
-    const arr_i = arr[i];
-    assertNonNullable(arr_i);
-    const arr_j = arr[j];
-    assertNonNullable(arr_j);
-    [arr[i], arr[j]] = [arr_j, arr_i];
+    [arr[i], arr[j]] = [arr[j]!, arr[i]!];
   }
   return arr;
 }
