@@ -5,10 +5,12 @@
  */
 export class UnexpectedValueError extends Error {
   constructor(
-    // Type enables static checking
+    // Type enables type checking
     value: never,
-    // Apply String() to avoid exception for symbols
-    message = `Unexpected value: ${String(value)}`
+    // Avoid exception if `value` is:
+    // - object without prototype
+    // - symbol
+    message = `Unexpected value: ${{}.toString.call(value)}`
   ) {
     super(message)
   }
@@ -17,8 +19,4 @@ export class UnexpectedValueError extends Error {
 /**
  * @deprecated Use {@link UnexpectedValueError}
  */
-export class UnsupportedValueError extends Error {
-  constructor( value: never, message = `Unsupported value: ${String(value)}` ) {
-    super(message)
-  }
-}
+export {UnexpectedValueError as UnsupportedValueError}
